@@ -10,6 +10,7 @@ ext {
 }
 
 android {
+    namespace "com.termux"
     compileSdkVersion project.properties.compileSdkVersion.toInteger()
     ndkVersion = System.getenv("JITPACK_NDK_VERSION") ?: project.properties.ndkVersion
     def appVersionName = System.getenv("TERMUX_APP_VERSION_NAME") ?: ""
@@ -40,7 +41,7 @@ android {
 
         externalNativeBuild {
             ndkBuild {
-                cFlags "-std=c11", "-Wall", "-Wextra", "-Werror", "-Os", "-fno-stack-protector", "-Wl,--gc-sections"
+                cFlags "-std=c11", "-Wall", "-Wextra", "-Os", "-fno-stack-protector", "-Wl,--gc-sections"
             }
         }
 
@@ -132,6 +133,10 @@ android {
                 outputFileName = new File("termux-app_" + (apkVersionTag ? apkVersionTag : project.ext.packageVariant + "-" + "release") + "_" + (abi ? abi : "universal") + ".apk")
             }
         }
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 }
 

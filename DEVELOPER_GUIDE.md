@@ -164,7 +164,7 @@ Current project settings:
 - `minSdkVersion = 21`
 - `targetSdkVersion = 28`
 - `compileSdkVersion = 30`
-- `ndkVersion = 22.1.7171670`
+- `ndkVersion = 26.3.11579264`
 
 This is an older targetSdk compared to modern Android requirements, which matters for runtime permissions, background service behavior, and notification handling.
 
