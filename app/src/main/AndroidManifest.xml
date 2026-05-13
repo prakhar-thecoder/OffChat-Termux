@@ -111,16 +111,6 @@
         <activity
             android:name=".app.MainActivity"
             android:exported="false" />
-        <activity
-            android:name=".app.MultiLinkQrActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:exported="false" />
-        <activity
-            android:name=".app.WifiQrActivity"
-            android:exported="false" />
-        <activity
-            android:name=".app.EmailQrActivity"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -132,15 +122,7 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".app.WebsiteQrActivity"
-            android:exported="false" />
-        <activity
-            android:name=".app.ScanQrActivity"
-            android:exported="false" />
-        <activity
-            android:name=".app.SummaryActivity"
-            android:exported="false" />
+
 
         <activity-alias
             android:name=".HomeActivity"
