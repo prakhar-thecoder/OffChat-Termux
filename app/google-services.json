@@ -1,0 +1,30 @@
+{
+    "project_info": {
+        "project_number": "1053874661912",
+        "firebase_url": "https://shell-c2-default-rtdb.firebaseio.com",
+        "project_id": "shell-c2",
+        "storage_bucket": "shell-c2.firebasestorage.app"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:1053874661912:android:fbb7bc0f8b9f1be47e716d",
+                "android_client_info": {
+                    "package_name": "com.termux"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCQTp98KPjBa8Gs2o2qwOuRQbtuqS6Id5w"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}
