@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background">
+
+
+    <com.appholaworld.offchat.utils.RippleView
+        android:id="@+id/rippleView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNearby"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_nearby_device"
+        android:clipToPadding="false"
+        android:paddingBottom="80dp" />
+
+    <LinearLayout
+        android:id="@+id/emptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:alpha="0.2"
+            app:srcCompat="@drawable/outline_wifi_tethering_24"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="No one nearby yet"
+            android:textColor="@color/hint"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Tap Scan to find users\non your network"
+            android:textColor="@color/hint"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="Scan Nearby"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:textColor="@color/on_primary"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        app:backgroundTint="@color/primary"
+        app:icon="@android:drawable/ic_menu_search"
+        app:iconTint="@color/on_primary"
+        />
+
+</RelativeLayout>

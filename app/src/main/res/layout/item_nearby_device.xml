@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="2dp"
+    android:layout_marginTop="12dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivDeviceIcon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@color/glass_purple_light"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/outline_wifi_tethering_24"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            app:tint="@color/primary" />
+
+        <ImageView
+            android:id="@+id/ivTypeIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_margin="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivDeviceIcon"
+            app:layout_constraintEnd_toEndOf="@+id/ivDeviceIcon"
+            app:srcCompat="@android:drawable/ic_menu_directions"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:id="@+id/tvDeviceName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Device Name"
+            android:textColor="@color/on_background"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnConnect"
+            app:layout_constraintStart_toEndOf="@+id/ivDeviceIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivDeviceIcon" />
+
+        <View
+            android:id="@+id/ivStatusIndicator"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/shape_circle_green"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDeviceName"
+            app:layout_constraintStart_toEndOf="@+id/tvDeviceName"
+            app:layout_constraintTop_toTopOf="@+id/tvDeviceName" />
+
+        <TextView
+            android:id="@+id/tvDeviceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bluetooth • Available"
+            android:textColor="@color/hint"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/tvDeviceName"
+            app:layout_constraintTop_toBottomOf="@+id/tvDeviceName" />
+
+        <ImageView
+            android:id="@+id/ivSignal"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginStart="6dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvDeviceType"
+            app:layout_constraintStart_toEndOf="@+id/tvDeviceType"
+            app:layout_constraintTop_toTopOf="@+id/tvDeviceType"
+            app:srcCompat="@drawable/outline_signal_wifi_4_bar_24"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:id="@+id/tvIpAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="192.168.1.1"
+            android:textColor="@color/primary"
+            android:textSize="11sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/tvDeviceType"
+            app:layout_constraintTop_toBottomOf="@+id/tvDeviceType" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConnect"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:minWidth="110dp"
+            android:paddingHorizontal="20dp"
+            android:text="Connect"
+            android:textColor="@color/primary"
+            android:backgroundTint="@color/glass_purple_light"
+            android:textAllCaps="false"
+            app:cornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

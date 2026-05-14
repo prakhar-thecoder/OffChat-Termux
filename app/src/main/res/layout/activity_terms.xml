@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground"
+        app:tint="@color/primary" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Terms &amp; Conditions"
+        android:textColor="@color/on_background"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardTerms"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:cardBackgroundColor="@color/surface"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAccept"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        app:strokeColor="@color/divider"
+        app:strokeWidth="1dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:text="Welcome to OffChat. Please read our Terms and Conditions carefully.\n\n1. Core Functionality: OffChat provides both a decentralized, peer-to-peer offline messaging platform and an online Firebase-powered chat. Your offline data is stored locally on your device.\n\n2. Permissions &amp; Data Usage (Play Store Compliant):\n• Location (Fine &amp; Coarse): Required strictly by the Android OS to discover nearby Wi-Fi and Bluetooth devices for offline mesh networking. We DO NOT track, store, or share your physical location.\n• Nearby Devices (Bluetooth &amp; Wi-Fi P2P): Required to scan, discover, and securely connect with peers in your vicinity without internet access.\n• Background Service (Foreground Service): We run a persistent notification service to maintain your mesh connections and notify you of new messages even when the app is backgrounded.\n• Notifications &amp; Vibration: Used to alert you of incoming messages and network requests.\n• Internet &amp; Network State: Required for online chat, Firebase Authentication, and establishing local network sockets.\n\n3. Data Protection: Offline messages are sent directly between peers. Online messages are routed via Firebase. You are responsible for the content you share.\n\n4. Mesh Relay: By using the offline mode, your device may help relay encrypted messages for other peers securely.\n\nBy clicking 'Accept &amp; Continue', you confirm that you understand and explicitly consent to these terms and our use of the required permissions."
+                android:textColor="@color/on_surface"
+                android:textSize="14sp" />
+        </ScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAccept"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:text="Accept &amp; Continue"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="2dp"
+    android:layout_marginTop="12dp"
+    app:strokeWidth="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivWifiIcon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@color/glass_purple_light"
+            app:contentPadding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/outline_signal_wifi_4_bar_24"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:id="@+id/tvSsid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Wi-Fi SSID"
+            android:textColor="@color/on_background"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivWifiIcon"
+            app:layout_constraintTop_toTopOf="@+id/ivWifiIcon"
+            app:layout_constraintBottom_toTopOf="@+id/tvBssid"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/tvBssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BSSID: 00:00:00:00:00:00"
+            android:textColor="@color/hint"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/tvSsid"
+            app:layout_constraintTop_toBottomOf="@+id/tvSsid"
+            app:layout_constraintBottom_toTopOf="@+id/tvSignalStrength" />
+
+        <TextView
+            android:id="@+id/tvSignalStrength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Signal: -50 dBm"
+            android:textColor="@color/primary"
+            android:textSize="11sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/tvBssid"
+            app:layout_constraintTop_toBottomOf="@+id/tvBssid"
+            app:layout_constraintBottom_toBottomOf="@+id/ivWifiIcon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

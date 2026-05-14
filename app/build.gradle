@@ -90,10 +90,6 @@ android {
         jvmTarget = "21"
     }
 
-    viewBinding {
-        enable = true
-    }
-
     externalNativeBuild {
         ndkBuild {
             path "src/main/cpp/Android.mk"
@@ -136,6 +132,8 @@ android {
     }
 
     buildFeatures {
+        viewBinding true
+        dataBinding true
         buildConfig true
     }
 }

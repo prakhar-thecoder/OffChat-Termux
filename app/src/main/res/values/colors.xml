@@ -1,7 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primePurple">#6C63FF</color>
-    <color name="primeBg">#FFFFFF</color>
-    <color name="primeCard">#FFFFFF</color>
-    <color name="primeGray">#EDEDED</color>
+
+    <!-- Premium Palette -->
+    <color name="primary">#5B5FFF</color> <!-- Neon Indigo -->
+    <color name="primary_dark">#3F3DCC</color>
+    <color name="primary_light">#7C82FF</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="navy_blue">#0B0F2A</color> <!-- Deep dark navy background -->
+
+    <color name="secondary">#5B5FFF</color> <!-- Electric Cyan -->
+    <color name="on_secondary">#001018</color>
+
+    <!-- Neutrals (Dark Theme Based) -->
+    <color name="background">#050816</color> <!-- Main dark background -->
+    <color name="surface">#0D132B</color> <!-- Card / phone surface -->
+    <color name="on_background">#E6E9FF</color>
+    <color name="on_surface">#E6E9FF</color>
+    
+    <color name="card_background">#111735</color>
+    <color name="divider">#1F2A4D</color>
+    <color name="hint">#7A86B6</color>
+    <color name="error">#FF4D6D</color>
+
+    <!-- Chat Specific -->
+    <color name="incoming_bubble">#1A2147</color> <!-- Dark bubble -->
+    <color name="outgoing_bubble">#5B5FFF</color>
+    <color name="on_outgoing_bubble">#FFFFFF</color>
+
+    <!-- Gradients & Accents -->
+    <color name="grad_start">#4F46E5</color> <!-- Indigo -->
+    <color name="grad_end">#8B5CF6</color> <!-- Purple -->
+
+    <!-- Glassmorphism -->
+    <color name="glass_white">#1AFFFFFF</color>
+    <color name="glass_purple_light">#335B5FFF</color>
+    <color name="glass_purple_border">#665B5FFF</color>
+
+    <color name="nav_inactive">#6B78A6</color>
+    <color name="nav_active">#5B5FFF</color> <!-- Using Electric Cyan for a distinct, high-contrast active state -->
+
+    <color name="primeBg">#050816</color>
+    <color name="primePurple">#5B5FFF</color>
 </resources>

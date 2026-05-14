@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/llMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bubble_outgoing"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="300dp">
+
+        <LinearLayout
+            android:id="@+id/layoutFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="#40FFFFFF"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:srcCompat="@android:drawable/ic_menu_save"
+                app:tint="@color/on_primary" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvFileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:maxWidth="160dp"
+                    android:singleLine="true"
+                    android:text="file_name.ext"
+                    android:textColor="@color/on_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvFileMetadata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Image • 2.4 MB"
+                    android:textColor="@color/primary_light"
+                    android:textSize="10sp" />
+
+                <ProgressBar
+                    android:id="@+id/pbFileProgress"
+                    style="@android:style/Widget.Material.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_marginTop="4dp"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="#FFFFFF"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvFileProgressPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tvFileSize"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 KB"
+                    android:textColor="@color/on_primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outgoing message text"
+            android:textColor="@color/on_primary"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:alpha="0.7"
+            android:text="10:00 AM"
+            android:textColor="@color/on_primary"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

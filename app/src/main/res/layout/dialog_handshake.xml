@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/surface">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <View
+            android:id="@+id/pulseView"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/shape_circle_primary"
+            android:alpha="0.2"
+            app:layout_constraintBottom_toBottomOf="@+id/ivAvatar"
+            app:layout_constraintEnd_toEndOf="@+id/ivAvatar"
+            app:layout_constraintStart_toStartOf="@+id/ivAvatar"
+            app:layout_constraintTop_toTopOf="@+id/ivAvatar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:padding="12dp"
+            android:background="@color/primary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+            app:srcCompat="@android:drawable/ic_menu_myplaces"
+            app:tint="@color/on_primary" />
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="New Connection Request"
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAvatar" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="User Name"
+            android:textColor="@color/on_surface"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Wants to establish a secure mesh link with you."
+            android:textColor="@color/hint"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAccept"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="Accept"
+            android:textColor="@color/on_primary"
+            app:backgroundTint="@color/primary"
+            android:textSize="16sp"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnDecline"
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDecline"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="Decline"
+            android:textColor="@color/error"
+            android:backgroundTint="@color/glass_purple_light"
+            android:textSize="16sp"
+            app:cornerRadius="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnAccept"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvMessage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

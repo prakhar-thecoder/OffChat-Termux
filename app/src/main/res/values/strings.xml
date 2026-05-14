@@ -12,9 +12,48 @@
     ]>
 
 <resources>
+    <string name="app_name">OffChat</string>
+    <string name="nav_chats">Chats</string>
+    <string name="nav_nearby">Nearby</string>
+    <string name="nav_account">Account</string>
+    <string name="no_chats_yet">No chats yet. Start by connecting with nearby users.</string>
+    <string name="invite_friends">Invite Friends</string>
+    <string name="scan">Scan</string>
+    <string name="stop">Stop</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="full_name">Full Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="default_web_client_id" translatable="false">453563909704-kt95io37m29nl29adp80kkecfdukg9ck.apps.googleusercontent.com</string>
+    <string name="offchat_terms_html"><![CDATA[
+<b>1. Dual-Mode Architecture</b><br/>
+By using OffChat, you acknowledge that the app operates in two distinct modes: Offline P2P Mesh and Online Firebase.<br/><br/>
 
-    <string name="application_name">OmniQR</string>
-    <string name="shared_user_label">&TERMUX_APP_NAME; user</string>
+<b>2. Offline Mesh &amp; Device Constraints</b><br/>
+&#8226; <b>Battery Intensive:</b> Maintaining a decentralized mesh requires active background socket listening, Wi-Fi P2P, and Network Service Discovery (NSD), which consumes significant battery life.<br/>
+&#8226; <b>System Permissions:</b> You must grant continuous Location and Nearby Devices (Bluetooth/Wi-Fi) permissions for node discovery.<br/>
+&#8226; <b>Network Routing:</b> The app utilizes virtual IPs (169.254.x.x) and binds to ports 8888-8898 to establish socket connections.<br/><br/>
+
+<b>3. Online Communication</b><br/>
+&#8226; <b>Authentication:</b> Google Sign-In is strictly required to prevent spam and verify identity.<br/>
+&#8226; <b>Cloud Storage:</b> Online chat history and presence statuses are routed and stored via Google Firebase Realtime Database.<br/><br/>
+
+<b>4. Data Collection &amp; Device Information</b><br/>
+By signing in, you agree that OffChat collects and stores the following device data in our secure cloud database solely to improve service quality, prevent fraud, and enable account recovery:<br/><br/>
+&#8226; <b>Android Device ID:</b> A unique identifier assigned to your device by Android (Settings.Secure.ANDROID_ID), used to associate your account with your device.<br/>
+&#8226; <b>Google Advertising ID (GAID):</b> A resettable advertising identifier provided by Google Play Services, used for analytics and a personalised experience. You can reset or opt out via Google Settings &gt; Ads on your device at any time.<br/>
+&#8226; <b>IP Address:</b> Your current network IP address is recorded at login to help detect suspicious access and improve connection reliability.<br/>
+&#8226; <b>Wi-Fi Network Information:</b> OffChat scans and records nearby Wi-Fi network names (SSID), access point identifiers (BSSID), and your device IP on each network. This data is used purely for mesh networking optimisation and proximity-based features. No browsing activity or network traffic is inspected.<br/><br/>
+
+<b>5. Privacy &amp; Security</b><br/>
+&#8226; <b>No Guarantee of E2E Encryption:</b> Raw socket packet exchanges and cloud database reads/writes are not fully end-to-end encrypted. Do not transmit highly sensitive financial or personal data.<br/>
+&#8226; <b>Data Retention:</b> Collected device and network data is stored in Database. You may request deletion of your account data by contacting support.<br/>
+&#8226; <b>Third-Party Services:</b> OffChat uses Google Firebase (Auth, Realtime Database, Cloud Messaging) and Google Play Services. Their respective privacy policies apply.<br/>
+&#8226; <b>Accountability:</b> You are solely responsible for the files, messages, and broadcasted metadata sent from your device node.<br/><br/>
+
+<b>6. Changes to These Terms</b><br/>
+OffChat reserves the right to update these Terms at any time. Continued use of the application after changes constitutes acceptance of the revised Terms.
+]]></string>
+
 
 
 
@@ -142,64 +181,64 @@
     <string name="termux_preferences_title">&TERMUX_APP_NAME;</string>
     <string name="termux_preferences_summary">Preferences for &TERMUX_APP_NAME; app</string>
 
-        <!-- Debugging Preferences -->
-        <string name="termux_debugging_preferences_title">Debugging</string>
-        <string name="termux_debugging_preferences_summary">Preferences for debugging</string>
+    <!-- Debugging Preferences -->
+    <string name="termux_debugging_preferences_title">Debugging</string>
+    <string name="termux_debugging_preferences_summary">Preferences for debugging</string>
 
-            <!-- Logging Category -->
-            <string name="termux_logging_header">Logging</string>
+    <!-- Logging Category -->
+    <string name="termux_logging_header">Logging</string>
 
-                <!-- Log Level -->
-                <string name="termux_log_level_title">Log Level</string>
+    <!-- Log Level -->
+    <string name="termux_log_level_title">Log Level</string>
 
-                <!-- Terminal View Key Logging -->
-                <string name="termux_terminal_view_key_logging_enabled_title">Terminal View Key Logging</string>
-                <string name="termux_terminal_view_key_logging_enabled_off">Logs will not have entries for terminal view keys. (Default)</string>
-                <string name="termux_terminal_view_key_logging_enabled_on">Logcat logs will have entries for terminal view keys.
+    <!-- Terminal View Key Logging -->
+    <string name="termux_terminal_view_key_logging_enabled_title">Terminal View Key Logging</string>
+    <string name="termux_terminal_view_key_logging_enabled_off">Logs will not have entries for terminal view keys. (Default)</string>
+    <string name="termux_terminal_view_key_logging_enabled_on">Logcat logs will have entries for terminal view keys.
                     These are very verbose and should be disabled under normal circumstances or will cause performance issues.</string>
 
-                <!-- Plugin Error Notifications -->
-                <string name="termux_plugin_error_notifications_enabled_title">Plugin Error Notifications</string>
-                <string name="termux_plugin_error_notifications_enabled_off">Disable flashes and notifications for plugin errors.</string>
-                <string name="termux_plugin_error_notifications_enabled_on">Show flashes and notifications for plugin errors. (Default)</string>
+    <!-- Plugin Error Notifications -->
+    <string name="termux_plugin_error_notifications_enabled_title">Plugin Error Notifications</string>
+    <string name="termux_plugin_error_notifications_enabled_off">Disable flashes and notifications for plugin errors.</string>
+    <string name="termux_plugin_error_notifications_enabled_on">Show flashes and notifications for plugin errors. (Default)</string>
 
-                <!-- Crash Report Notifications -->
-                <string name="termux_crash_report_notifications_enabled_title">Crash Report Notifications</string>
-                <string name="termux_crash_report_notifications_enabled_off">Disable notifications for crash reports.</string>
-                <string name="termux_crash_report_notifications_enabled_on">Show notifications for crash reports. (Default)</string>
+    <!-- Crash Report Notifications -->
+    <string name="termux_crash_report_notifications_enabled_title">Crash Report Notifications</string>
+    <string name="termux_crash_report_notifications_enabled_off">Disable notifications for crash reports.</string>
+    <string name="termux_crash_report_notifications_enabled_on">Show notifications for crash reports. (Default)</string>
 
 
-        <!-- Terminal IO Preferences -->
-        <string name="termux_terminal_io_preferences_title">Terminal I/O</string>
-        <string name="termux_terminal_io_preferences_summary">Preferences for terminal I/O</string>
+    <!-- Terminal IO Preferences -->
+    <string name="termux_terminal_io_preferences_title">Terminal I/O</string>
+    <string name="termux_terminal_io_preferences_summary">Preferences for terminal I/O</string>
 
-            <!-- Keyboard Category -->
-            <string name="termux_keyboard_header">Keyboard</string>
+    <!-- Keyboard Category -->
+    <string name="termux_keyboard_header">Keyboard</string>
 
-                <!-- Soft Keyboard -->
-                <string name="termux_soft_keyboard_enabled_title">Soft Keyboard Enabled</string>
-                <string name="termux_soft_keyboard_enabled_off">Soft keyboard will be disabled.</string>
-                <string name="termux_soft_keyboard_enabled_on">Soft keyboard will be enabled. (Default)</string>
+    <!-- Soft Keyboard -->
+    <string name="termux_soft_keyboard_enabled_title">Soft Keyboard Enabled</string>
+    <string name="termux_soft_keyboard_enabled_off">Soft keyboard will be disabled.</string>
+    <string name="termux_soft_keyboard_enabled_on">Soft keyboard will be enabled. (Default)</string>
 
-                <!-- Soft Keyboard Only If No Hardware-->
-                <string name="termux_soft_keyboard_enabled_only_if_no_hardware_title">Soft Keyboard Only If No Hardware</string>
-                <string name="termux_soft_keyboard_enabled_only_if_no_hardware_off">Soft keyboard will be enabled even if
+    <!-- Soft Keyboard Only If No Hardware-->
+    <string name="termux_soft_keyboard_enabled_only_if_no_hardware_title">Soft Keyboard Only If No Hardware</string>
+    <string name="termux_soft_keyboard_enabled_only_if_no_hardware_off">Soft keyboard will be enabled even if
                     hardware keyboard is connected. (Default)</string>
-                <string name="termux_soft_keyboard_enabled_only_if_no_hardware_on">Soft keyboard will be enabled only if
+    <string name="termux_soft_keyboard_enabled_only_if_no_hardware_on">Soft keyboard will be enabled only if
                     no hardware keyboard is connected.</string>
 
 
-        <!-- Terminal View Preferences -->
-        <string name="termux_terminal_view_preferences_title">Terminal View</string>
-        <string name="termux_terminal_view_preferences_summary">Preferences for terminal view</string>
+    <!-- Terminal View Preferences -->
+    <string name="termux_terminal_view_preferences_title">Terminal View</string>
+    <string name="termux_terminal_view_preferences_summary">Preferences for terminal view</string>
 
-            <!-- View Category -->
-            <string name="termux_terminal_view_view_header">View</string>
+    <!-- View Category -->
+    <string name="termux_terminal_view_view_header">View</string>
 
-                <!-- Terminal View Margin Adjustment -->
-                <string name="termux_terminal_view_terminal_margin_adjustment_title">Terminal Margin Adjustment</string>
-                <string name="termux_terminal_view_terminal_margin_adjustment_off">Terminal margin adjustment will be disabled.</string>
-                <string name="termux_terminal_view_terminal_margin_adjustment_on">Terminal margin adjustment will be enabled.
+    <!-- Terminal View Margin Adjustment -->
+    <string name="termux_terminal_view_terminal_margin_adjustment_title">Terminal Margin Adjustment</string>
+    <string name="termux_terminal_view_terminal_margin_adjustment_off">Terminal margin adjustment will be disabled.</string>
+    <string name="termux_terminal_view_terminal_margin_adjustment_on">Terminal margin adjustment will be enabled.
                     It should be enabled to try to fix the issue where soft keyboard covers part of extra keys/terminal view.
                     If it causes screen flickering on your devices, then disable it. (Default)</string>
 
@@ -234,5 +273,10 @@
 
     <!-- Donate Preference -->
     <string name="donate_preference_title">Donate</string>
+
+    <string name="shared_user_label">&TERMUX_APP_NAME; user</string>
+    <string name="application_name">OffChat</string>
+    <string name="action_yes">Yes</string>
+    <string name="action_no">No</string>
 
 </resources>
