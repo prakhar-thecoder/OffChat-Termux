@@ -14,7 +14,7 @@ import com.appholaworld.offchat.repository.OnlineChatRepository
 
 val Context.dataStore by preferencesDataStore(name = "meshr_settings")
 
-class OffChatApp : Application() {
+open class OffChatApp : Application() {
     
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private var foregroundActivityCount = 0
@@ -30,7 +30,7 @@ class OffChatApp : Application() {
     lateinit var meshManager: MeshManager
         private set
 
-    override fun onCreate() {
+    open override fun onCreate() {
         super.onCreate()
         
         registerActivityLifecycleCallbacks(object : android.app.Application.ActivityLifecycleCallbacks {
