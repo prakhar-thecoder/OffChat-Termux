@@ -34,6 +34,16 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun checkAuthAndNavigate() {
+        val bashFile = java.io.File("/data/data/com.termux/files/usr/bin/bash")
+        if (!bashFile.exists()) {
+            // Environment missing. Route to TermuxActivity for automated setup.
+            val intent = android.content.Intent(this@SplashActivity, com.termux.app.TermuxActivity::class.java)
+            intent.putExtra("OFFCHAT_SETUP_MODE", true)
+            startActivity(intent)
+            finish()
+            return
+        }
+
         try {
             val user = onlineChatRepository.getCurrentUser()
             // Fast path: Check local preferences first

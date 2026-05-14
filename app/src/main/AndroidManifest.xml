@@ -88,8 +88,6 @@
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
-
-
         <activity
             android:name=".app.TermuxActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"

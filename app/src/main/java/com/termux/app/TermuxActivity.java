@@ -217,8 +217,16 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         setActivityTheme();
 
+        // Check if we are in setup mode before inflating or showing anything
+        boolean isSetupMode = getIntent().getBooleanExtra("OFFCHAT_SETUP_MODE", false);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_termux);
+
+        if (isSetupMode) {
+            // Instead of changing the theme, just make the terminal grid invisible so the user only sees the setup dialog.
+            findViewById(R.id.activity_termux_root_view).setVisibility(View.INVISIBLE);
+        }
 
         // Load termux shared preferences
         // This will also fail if TermuxConstants.TERMUX_PACKAGE_NAME does not equal applicationId
@@ -426,6 +434,15 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             if (mIsVisible) {
                 TermuxInstaller.setupBootstrapIfNeeded(TermuxActivity.this, () -> {
                     if (mTermuxService == null) return; // Activity might have been destroyed.
+                    
+                    // Check if we were launched by SplashActivity for initial setup
+                    if (intent != null && intent.getBooleanExtra("OFFCHAT_SETUP_MODE", false)) {
+                        android.content.Intent authIntent = new android.content.Intent(TermuxActivity.this, com.appholaworld.offchat.activities.AuthActivity.class);
+                        startActivity(authIntent);
+                        finish();
+                        return;
+                    }
+
                     try {
                         boolean launchFailsafe = false;
                         if (intent != null && intent.getExtras() != null) {
