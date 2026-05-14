@@ -7,6 +7,7 @@ import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.appholaworld.offchat.activities.SplashActivity;
 import com.termux.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(MainActivity.this, SummaryActivity.class));
+            startActivity(new Intent(MainActivity.this, SplashActivity.class));
             finish();
         }, 1200);
     }
