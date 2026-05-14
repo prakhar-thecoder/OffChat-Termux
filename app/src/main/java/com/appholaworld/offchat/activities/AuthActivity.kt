@@ -58,10 +58,15 @@ class AuthActivity : BaseActivity() {
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 viewModel.setAuthLoading(false)
-                Toast.makeText(this@AuthActivity, "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                // Log the exact API exception status code to pinpoint the failure
+                Toast.makeText(this@AuthActivity, "Auth failed. Code: ${e.statusCode}", Toast.LENGTH_LONG).show()
+                android.util.Log.e("AuthActivity", "Google Sign-In failed", e)
             }
         } else {
             viewModel.setAuthLoading(false)
+            // Warn when the intent gets canceled or fails before returning OK
+            Toast.makeText(this@AuthActivity, "Canceled/Failed. ResultCode: ${result.resultCode}", Toast.LENGTH_LONG).show()
+            android.util.Log.w("AuthActivity", "Result not OK. Code: ${result.resultCode}")
         }
     }
 

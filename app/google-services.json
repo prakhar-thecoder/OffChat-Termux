@@ -1,30 +1,85 @@
 {
-    "project_info": {
-        "project_number": "1053874661912",
-        "firebase_url": "https://shell-c2-default-rtdb.firebaseio.com",
-        "project_id": "shell-c2",
-        "storage_bucket": "shell-c2.firebasestorage.app"
-    },
-    "client": [
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:1053874661912:android:fbb7bc0f8b9f1be47e716d",
-                "android_client_info": {
-                    "package_name": "com.termux"
-                }
-            },
-            "oauth_client": [],
-            "api_key": [
-                {
-                    "current_key": "AIzaSyCQTp98KPjBa8Gs2o2qwOuRQbtuqS6Id5w"
-                }
-            ],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": []
-                }
-            }
+  "project_info": {
+    "project_number": "453563909704",
+    "firebase_url": "https://off-chat-d3cb9-default-rtdb.firebaseio.com",
+    "project_id": "off-chat-d3cb9",
+    "storage_bucket": "off-chat-d3cb9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453563909704:android:56f923d2742b7ef608fa7d",
+        "android_client_info": {
+          "package_name": "com.appholaworld.offchat"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "453563909704-71sk1h7olqq0tbj3n5h6u9v9jui1l17f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appholaworld.offchat",
+            "certificate_hash": "e53a6b02846494ca2dbfb0c329a3ec8f3d3af1a4"
+          }
+        },
+        {
+          "client_id": "453563909704-jd9lvdh5g0c182uq3q05hc0vr93upggv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appholaworld.offchat",
+            "certificate_hash": "4b8d682b4427c727ba867fdcb883ef74f1a9e9d3"
+          }
+        },
+        {
+          "client_id": "453563909704-kt95io37m29nl29adp80kkecfdukg9ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ZgYNLICbL4xSqv6o0ZfogjShPVXMybA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453563909704-kt95io37m29nl29adp80kkecfdukg9ck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453563909704:android:d7050a6c02f450e708fa7d",
+        "android_client_info": {
+          "package_name": "com.termux"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "453563909704-kt95io37m29nl29adp80kkecfdukg9ck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ZgYNLICbL4xSqv6o0ZfogjShPVXMybA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "453563909704-kt95io37m29nl29adp80kkecfdukg9ck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

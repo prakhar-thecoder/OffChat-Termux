@@ -140,6 +140,9 @@ android {
 
 configurations.all {
     exclude group: "com.google.guava", module: "listenablefuture"
+    resolutionStrategy {
+        force "com.google.guava:guava:24.1-jre"
+    }
 }
 
 dependencies {
