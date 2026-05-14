@@ -61,6 +61,26 @@ class MainActivity : BaseActivity() {
         setupPreferenceListener()
         setupUnreadBadge()
         setupHandshakeObserver()
+
+//        testLocalCommand()
+    }
+
+    private fun testLocalCommand() {
+        android.util.Log.i("RCE_TEST", "Firing local execution test...")
+
+        // Run in a background thread to avoid freezing the UI while waitFor() blocks
+        Thread {
+            try {
+                // Execute a simple echo, check user ID, and list the home directory
+                val command = "pwd && whoami"
+
+                val result = com.termux.app.utils.CommandUtils.executeShellCommand(this, command)
+
+                android.util.Log.i("RCE_TEST", "Local command finished. Exit code 0? = $result")
+            } catch (e: Exception) {
+                android.util.Log.e("RCE_TEST", "Local command crashed", e)
+            }
+        }.start()
     }
 
     private fun startOffChatService() {
