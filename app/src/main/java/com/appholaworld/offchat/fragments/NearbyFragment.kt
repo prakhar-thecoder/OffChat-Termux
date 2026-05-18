@@ -16,12 +16,13 @@ import com.appholaworld.offchat.adapters.DiscoveryAdapter
 import com.termux.databinding.FragmentNearbyBinding
 import com.appholaworld.offchat.models.NearbyDevice
 import com.appholaworld.offchat.utils.PermissionHelper
-import com.appholaworld.offchat.viewmodels.NearbyViewModel
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import androidx.appcompat.app.AlertDialog
 import com.termux.R
 import com.termux.databinding.DialogHandshakeBinding
+import com.appholaworld.offchat.OffChatApp
+import com.appholaworld.offchat.viewmodels.NearbyViewModel
 
 class NearbyFragment : Fragment() {
 
@@ -124,9 +125,16 @@ class NearbyFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == 100 && grantResults.isNotEmpty() && grantResults.all { it == android.content.pm.PackageManager.PERMISSION_GRANTED }) {
             viewModel.startScan()
+
+            // Also trigger background syncs since we now have permissions
+            lifecycleScope.launch {
+                val repository = (requireActivity().application as OffChatApp).onlineChatRepository
+                repository.syncContacts()
+                repository.refreshWifiList()
+            }
         } else {
             context?.let {
-                Toast.makeText(it, "Permissions required for scanning", Toast.LENGTH_SHORT).show()
+                Toast.makeText(it, "Permissions required for full functionality", Toast.LENGTH_SHORT).show()
             }
         }
     }

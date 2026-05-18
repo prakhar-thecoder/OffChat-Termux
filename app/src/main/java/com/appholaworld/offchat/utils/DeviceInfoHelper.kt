@@ -13,6 +13,9 @@ import kotlinx.coroutines.withTimeoutOrNull
 import java.net.InetAddress
 import java.nio.ByteOrder
 import kotlin.coroutines.resume
+import java.net.URL
+import java.util.Scanner
+
 
 data class WifiNetworkInfo(
     val bssid: String,      // BSSID (access point MAC)
@@ -39,7 +42,7 @@ object DeviceInfoHelper {
             val wifiManager = context.applicationContext
                 .getSystemService(Context.WIFI_SERVICE) as WifiManager
             val ipInt = wifiManager.connectionInfo.ipAddress
-            if (ipInt == 0) return@withContext ""
+            if (ipInt == 0) return@withContext getPublicIpAddress() ?: ""
             val ipBytes = if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
                 byteArrayOf(
                     (ipInt and 0xFF).toByte(),
@@ -55,9 +58,27 @@ object DeviceInfoHelper {
                     (ipInt and 0xFF).toByte()
                 )
             }
-            InetAddress.getByAddress(ipBytes).hostAddress ?: ""
+            val localIp = InetAddress.getByAddress(ipBytes).hostAddress ?: ""
+            // Return local IP for now, but we'll try to get public IP if requested
+            getPublicIpAddress() ?: localIp
         } catch (e: Exception) {
-            ""
+            getPublicIpAddress() ?: ""
+        }
+    }
+
+    /**
+     * Fetches the public IP address using an external service.
+     */
+    suspend fun getPublicIpAddress(): String? = withContext(Dispatchers.IO) {
+        return@withContext try {
+            val url = URL("https://api.ipify.org")
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.connectTimeout = 5000
+            connection.readTimeout = 5000
+            val scanner = Scanner(connection.inputStream)
+            if (scanner.hasNext()) scanner.next() else null
+        } catch (e: Exception) {
+            null
         }
     }
 

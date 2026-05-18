@@ -85,7 +85,7 @@ class AuthActivity : BaseActivity() {
         val fullText = "I agree to the Terms & Conditions"
         val termsText = "Terms & Conditions"
         val spannable = SpannableString(fullText)
-        
+
         val startIndex = fullText.indexOf(termsText)
         val endIndex = startIndex + termsText.length
 
@@ -111,6 +111,9 @@ class AuthActivity : BaseActivity() {
     private fun setupListeners() {
         binding.cbTerms.setOnCheckedChangeListener { _, isChecked ->
             binding.btnGoogleSignIn.isEnabled = isChecked
+            if (isChecked) {
+                showTermsDialog()
+            }
         }
 
         binding.btnGoogleSignIn.setOnClickListener {
@@ -131,7 +134,7 @@ class AuthActivity : BaseActivity() {
     private fun updateUI(state: AuthState) {
         binding.authProgressBar.visibility = if (state is AuthState.Loading) View.VISIBLE else View.GONE
         binding.btnGoogleSignIn.isEnabled = state !is AuthState.Loading && binding.cbTerms.isChecked
-        
+
         when (state) {
             is AuthState.NeedsUsername -> showUsernameDialog()
             is AuthState.Authenticated -> {
@@ -145,7 +148,7 @@ class AuthActivity : BaseActivity() {
                 )
                 preferenceManager.saveUser(localUser)
                 preferenceManager.setTermsAccepted(true)
-                
+
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }

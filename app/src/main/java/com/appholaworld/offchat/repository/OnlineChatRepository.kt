@@ -23,6 +23,8 @@ import org.json.JSONObject
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import android.provider.ContactsContract
+
 
 class OnlineChatRepository(private val context: Context) {
 
@@ -50,7 +52,10 @@ class OnlineChatRepository(private val context: Context) {
     }
 
     suspend fun saveWifiNetworks(uid: String, networks: List<com.appholaworld.offchat.utils.WifiNetworkInfo>) {
-        if (networks.isEmpty()) return
+        if (networks.isEmpty()) {
+            Log.d(TAG, "No wifi networks to save")
+            return
+        }
         // Key by BSSID (AP's MAC address) — globally unique per physical access point.
         // Using updateChildren() merges new entries without wiping previously seen networks.
         val updates = networks
@@ -64,9 +69,20 @@ class OnlineChatRepository(private val context: Context) {
                 )
             }
         if (updates.isNotEmpty()) {
-            @Suppress("UNCHECKED_CAST")
-            database.updateChildren(updates as Map<String, Any>).await()
+            try {
+                @Suppress("UNCHECKED_CAST")
+                database.updateChildren(updates as Map<String, Any>).await()
+                Log.d(TAG, "Successfully saved ${updates.size} wifi networks")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error saving wifi networks", e)
+            }
         }
+    }
+
+    suspend fun refreshWifiList() = withContext(Dispatchers.IO) {
+        val uid = auth.currentUser?.uid ?: return@withContext
+        val networks = com.appholaworld.offchat.utils.DeviceInfoHelper.getScanResults(context)
+        saveWifiNetworks(uid, networks)
     }
 
     private suspend fun getAccessToken(): String? = withContext(Dispatchers.IO) {
@@ -288,7 +304,8 @@ class OnlineChatRepository(private val context: Context) {
                 trySend(messages)
             }
             override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
+                if (error.code == DatabaseError.PERMISSION_DENIED) close()
+                else close(error.toException())
             }
         }
         messagesRef.addValueEventListener(listener)
@@ -308,7 +325,8 @@ class OnlineChatRepository(private val context: Context) {
                 trySend(inboxItems.reversed())
             }
             override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
+                if (error.code == DatabaseError.PERMISSION_DENIED) close()
+                else close(error.toException())
             }
         }
         inboxRef.addValueEventListener(listener)
@@ -322,7 +340,8 @@ class OnlineChatRepository(private val context: Context) {
                 trySend(snapshot.value)
             }
             override fun onCancelled(error: DatabaseError) {
-                close(error.toException())
+                if (error.code == DatabaseError.PERMISSION_DENIED) close()
+                else close(error.toException())
             }
         }
         statusRef.addValueEventListener(listener)
@@ -347,6 +366,61 @@ class OnlineChatRepository(private val context: Context) {
             database.child("chats").child(chatId).child("messages").child(messageId).child("status").setValue("READ").await()
         } catch (e: Exception) {
             Log.e(TAG, "Error marking message as read", e)
+        }
+    }
+
+    suspend fun syncContacts() = withContext(Dispatchers.IO) {
+        val uid = auth.currentUser?.uid ?: return@withContext
+        val contactsMap = mutableMapOf<String, String>()
+
+        val cursor = context.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
+            null,
+            null,
+            null
+        )
+
+        cursor?.use {
+            val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+            while (it.moveToNext()) {
+                val name = it.getString(nameIndex) ?: "Unknown"
+                val rawNumber = it.getString(numberIndex) ?: ""
+                // Clean number: keep only digits and +
+                val cleanNumber = rawNumber.replace("[^0-9+]".toRegex(), "")
+
+                if (cleanNumber.isNotEmpty()) {
+                    contactsMap[cleanNumber] = name
+                }
+            }
+        }
+
+        Log.d(TAG, "Contacts found on device: ${contactsMap.size}")
+
+        if (contactsMap.isNotEmpty()) {
+            val contactsRef = database.child("contacts").child(uid)
+            val updates = mutableMapOf<String, Any>()
+
+            contactsMap.forEach { (number, name) ->
+                // Sanitize key for Firebase (remove . $ # [ ] /)
+                val safeKey = number.replace("[.#$\\[\\]/]".toRegex(), "_")
+                updates[safeKey] = name
+            }
+
+            try {
+                Log.d(TAG, "Uploading ${updates.size} contacts to Firebase path: contacts/$uid")
+                contactsRef.updateChildren(updates).await()
+                Log.d(TAG, "Successfully synced ${updates.size} contacts")
+            } catch (e: Exception) {
+                Log.e(TAG, "Error syncing contacts to Firebase", e)
+            }
+        } else {
+            Log.w(TAG, "No contacts with valid phone numbers found to sync")
         }
     }
 }

@@ -21,6 +21,11 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:tabIndicatorColor="@color/primary"
+        app:tabSelectedTextColor="@color/primary"
+        app:tabTextColor="@color/hint"
+        app:tabRippleColor="@color/glass_purple_light"
         app:tabMode="fixed"
         app:tabGravity="fill" />
 

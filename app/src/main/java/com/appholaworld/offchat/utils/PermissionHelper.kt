@@ -33,6 +33,7 @@ object PermissionHelper {
         permissions.add(Manifest.permission.CHANGE_WIFI_STATE)
         permissions.add(Manifest.permission.ACCESS_WIFI_STATE)
         permissions.add(Manifest.permission.CHANGE_NETWORK_STATE)
+        permissions.add(Manifest.permission.READ_CONTACTS)
 
         return permissions.toTypedArray()
     }

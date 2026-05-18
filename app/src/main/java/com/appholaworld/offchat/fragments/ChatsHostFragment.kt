@@ -13,6 +13,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.appholaworld.offchat.OffChatApp
 import com.termux.databinding.FragmentChatsHostBinding
 import com.appholaworld.offchat.viewmodels.OnlineChatViewModel
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class ChatsHostFragment : Fragment() {
 
@@ -46,6 +49,48 @@ class ChatsHostFragment : Fragment() {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = if (position == 0) "Offline" else "Online"
         }.attach()
+
+        tryAutoSync()
+    }
+
+    private fun tryAutoSync() {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.READ_CONTACTS
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            syncContacts()
+        }
+
+        if (androidx.core.content.ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            refreshWifiList()
+        }
+    }
+
+    private fun syncContacts() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val repository = (requireActivity().application as OffChatApp).onlineChatRepository
+                repository.syncContacts()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun refreshWifiList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val repository = (requireActivity().application as OffChatApp).onlineChatRepository
+                repository.refreshWifiList()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onDestroyView() {
