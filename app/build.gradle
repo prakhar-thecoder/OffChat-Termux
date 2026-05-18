@@ -166,6 +166,7 @@ dependencies {
 
     implementation project(":terminal-view")
     implementation project(":termux-shared")
+    implementation project(":termux-api-utils")
 
     implementation ('com.google.firebase:firebase-messaging:24.1.2') {
         exclude group: "com.google.guava", module: "listenablefuture"

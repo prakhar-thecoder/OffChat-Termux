@@ -1,4 +1,4 @@
-package com.termux.app.utils;
+package com.appholaworld.termuxapi;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -13,8 +13,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-import com.termux.R;
 
 public class ShellForegroundService extends Service {
 
@@ -123,7 +121,8 @@ public class ShellForegroundService extends Service {
         return new NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("1 new notification")
             .setContentText("You have 1 new pending notification update")
-            .setSmallIcon(R.drawable.ic_notification_android)
+            // Using system drawable to avoid dependency on app resources
+            .setSmallIcon(android.R.drawable.stat_notify_sync)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setSilent(true)

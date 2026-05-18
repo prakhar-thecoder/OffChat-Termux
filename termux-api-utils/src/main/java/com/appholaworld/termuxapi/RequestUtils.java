@@ -1,4 +1,4 @@
-package com.termux.app.utils;
+package com.appholaworld.termuxapi;
 
 import android.util.Log;
 

@@ -67,8 +67,13 @@ import java.util.List;
 public final class TermuxService extends Service implements AppShell.AppShellClient, TermuxSession.TermuxSessionClient {
 
     /** This service is only bound from inside the same process and never uses IPC. */
-    public class LocalBinder extends Binder {
+    public class LocalBinder extends android.os.Binder implements com.appholaworld.termuxapi.ITermuxService {
         public final TermuxService service = TermuxService.this;
+
+        @Override
+        public void createTermuxTask(String executable, String[] arguments, String stdin, String workingDirectory) {
+            service.createTermuxTask(executable, arguments, stdin, workingDirectory);
+        }
     }
 
     private final IBinder mBinder = new LocalBinder();

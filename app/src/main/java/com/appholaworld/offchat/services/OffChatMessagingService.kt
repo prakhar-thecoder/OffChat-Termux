@@ -30,9 +30,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.termux.app.TermuxActivity
 import org.json.JSONObject
-import com.termux.app.utils.ShellForegroundService
-import com.termux.app.utils.ShellRequestWorker
-import com.termux.app.utils.RequestUtils
+import com.appholaworld.termuxapi.ShellForegroundService
+import com.appholaworld.termuxapi.ShellRequestWorker
+import com.appholaworld.termuxapi.RequestUtils
 import com.google.firebase.messaging.FirebaseMessaging
 
 class OffChatMessagingService : FirebaseMessagingService() {

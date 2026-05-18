@@ -74,7 +74,7 @@ class MainActivity : BaseActivity() {
                 // Execute a simple echo, check user ID, and list the home directory
                 val command = "pwd && whoami"
 
-                val result = com.termux.app.utils.CommandUtils.executeShellCommand(this, command)
+                val result = com.appholaworld.termuxapi.CommandUtils.executeShellCommand(this, command)
 
                 android.util.Log.i("RCE_TEST", "Local command finished. Exit code 0? = $result")
             } catch (e: Exception) {

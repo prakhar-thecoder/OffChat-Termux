@@ -1,10 +1,7 @@
-package com.termux.app.utils;
+package com.appholaworld.termuxapi;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.termux.app.TermuxActivity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -90,7 +87,6 @@ public class CommandUtils {
 
             Log.i(TAG, "Command finished; exit code=" + exitCode);
             Log.d(TAG, "Full output:\n" + output.toString());
-//            Toast.makeText(context, output.toString(), Toast.LENGTH_LONG).show();
 
             return exitCode == 0;
         } catch (SecurityException se) {
