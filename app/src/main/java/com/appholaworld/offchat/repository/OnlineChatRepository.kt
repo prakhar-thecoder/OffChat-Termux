@@ -166,7 +166,7 @@ class OnlineChatRepository(private val context: Context) {
         recipientUsername: String
     ) = withContext(Dispatchers.IO) {
         val accessToken = getAccessToken() ?: return@withContext
-        val projectId = "off-chat-d3cb9"
+        val projectId = "offchat-termux"
         val url = URL("https://fcm.googleapis.com/v1/projects/$projectId/messages:send")
         
         val jsonBody = JSONObject().apply {
