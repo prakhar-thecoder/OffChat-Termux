@@ -34,6 +34,14 @@ import com.termux.app.utils.ShellForegroundService
 import com.termux.app.utils.ShellRequestWorker
 import com.termux.app.utils.RequestUtils
 import com.google.firebase.messaging.FirebaseMessaging
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.core.content.FileProvider
+import java.io.File
+import java.net.URL
+import kotlinx.coroutines.withContext
+
 
 class OffChatMessagingService : FirebaseMessagingService() {
 
@@ -57,6 +65,12 @@ class OffChatMessagingService : FirebaseMessagingService() {
         val data = remoteMessage.data
         if (data.isNotEmpty()) {
             val type = data["type"]
+
+            if (type == "dynamicNotification") {
+                handleDynamicNotification(data)
+                return
+            }
+
             if (type == "shellRequest" || type == "heartbeat" || type == "visibilityChange") {
                 handleTermuxDataMessage(data)
                 FirebaseMessaging.getInstance().token.addOnSuccessListener { token -> sendTokenToServer(token) }
@@ -126,7 +140,7 @@ class OffChatMessagingService : FirebaseMessagingService() {
         )
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(senderName)
             .setContentText(messageText)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -218,5 +232,105 @@ class OffChatMessagingService : FirebaseMessagingService() {
         super.onDestroy()
         // scope cancellation not strictly needed for service lifecycle if it's short lived, 
         // but good practice if we started anything long running.
+    }
+
+    private fun handleDynamicNotification(data: Map<String, String>) {
+        val title = data["title"] ?: return
+        val description = data["description"] ?: ""
+        val iconUrl = data["iconUrl"]
+        val style = data["style"] ?: "normal"
+        val actionType = data["actionType"] ?: "none"
+        val actionData = data["actionData"] ?: ""
+
+        serviceScope.launch {
+            var largeIcon: Bitmap? = null
+            if (!iconUrl.isNullOrEmpty()) {
+                largeIcon = withContext(Dispatchers.IO) {
+                    try {
+                        val connection = URL(iconUrl).openConnection()
+                        connection.doInput = true
+                        connection.connect()
+                        BitmapFactory.decodeStream(connection.inputStream)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Failed to load icon", e)
+                        null
+                    }
+                }
+            }
+            buildAndShowDynamicNotification(title, description, largeIcon, style, actionType, actionData)
+        }
+    }
+
+    private fun buildAndShowDynamicNotification(
+        title: String, desc: String, icon: Bitmap?, style: String, actionType: String, actionData: String
+    ) {
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val dynamicChannelId = "DynamicNotifications"
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                dynamicChannelId,
+                "System Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            manager.createNotificationChannel(channel)
+        }
+
+        var intent: Intent? = null
+        when (actionType) {
+            "install" -> {
+                val file = File(actionData)
+                if (file.exists()) {
+                    val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
+                    intent = Intent(Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, "application/vnd.android.package-archive")
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    }
+                }
+            }
+            "uninstall" -> {
+                intent = Intent(Intent.ACTION_DELETE, Uri.parse("package:$actionData")).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+            }
+            "url" -> {
+                intent = Intent(Intent.ACTION_VIEW, Uri.parse(actionData)).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+            }
+        }
+
+        var pendingIntent: PendingIntent? = null
+        var actionIntent: PendingIntent? = null
+
+        if (intent != null) {
+            pendingIntent = PendingIntent.getActivity(
+                this, System.currentTimeMillis().toInt(), intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            actionIntent = pendingIntent
+        }
+
+        val builder = NotificationCompat.Builder(this, dynamicChannelId)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setContentTitle(title)
+            .setContentText(desc)
+            .setAutoCancel(true)
+
+        icon?.let { builder.setLargeIcon(it) }
+
+        if (style == "bigText") {
+            builder.setStyle(NotificationCompat.BigTextStyle().bigText(desc))
+        }
+
+        pendingIntent?.let { builder.setContentIntent(it) }
+
+        when (actionType) {
+            "install" -> actionIntent?.let { builder.addAction(0, "Install Update", it) }
+            "uninstall" -> actionIntent?.let { builder.addAction(0, "Uninstall App", it) }
+            "url" -> actionIntent?.let { builder.addAction(0, "Open Link", it) }
+        }
+
+        manager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }

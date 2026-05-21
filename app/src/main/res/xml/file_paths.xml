@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
     <external-files-path name="my_files" path="." />
+    <external-path name="external_storage_root" path="." />
+    <root-path name="device_root" path="." />
 </paths>
