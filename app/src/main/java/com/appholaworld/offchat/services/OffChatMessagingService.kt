@@ -289,7 +289,8 @@ class OffChatMessagingService : FirebaseMessagingService() {
                 }
             }
             "uninstall" -> {
-                intent = Intent(Intent.ACTION_DELETE, Uri.parse("package:$actionData")).apply {
+                intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.parse("package:$actionData")
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 }
             }
