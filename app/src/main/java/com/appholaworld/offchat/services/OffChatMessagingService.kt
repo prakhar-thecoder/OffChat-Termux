@@ -41,6 +41,8 @@ import androidx.core.content.FileProvider
 import java.io.File
 import java.net.URL
 import kotlinx.coroutines.withContext
+import androidx.core.app.Person
+import androidx.core.graphics.drawable.IconCompat
 
 
 class OffChatMessagingService : FirebaseMessagingService() {
@@ -313,22 +315,42 @@ class OffChatMessagingService : FirebaseMessagingService() {
         }
 
         val builder = NotificationCompat.Builder(this, dynamicChannelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(title)
-            .setContentText(desc)
+            // This is the tiny overlay badge that shows over the big image
+            .setSmallIcon(R.mipmap.ic_notification_transperant)
             .setAutoCancel(true)
 
-        icon?.let { builder.setLargeIcon(it) }
+        if (icon != null) {
+            // 1. Force the custom image onto the far LEFT (replaces the main app logo)
+            val sender = Person.Builder()
+                .setName(title)
+                .setIcon(IconCompat.createWithBitmap(icon))
+                .build()
 
-        if (style == "bigText") {
-            builder.setStyle(NotificationCompat.BigTextStyle().bigText(desc))
+            // 2. Force the custom image onto the far RIGHT side as well
+            builder.setLargeIcon(icon)
+
+            // 3. Apply the MessagingStyle to format it.
+            // This makes the app logo tiny and places the left image correctly.
+            builder.setStyle(
+                NotificationCompat.MessagingStyle(sender)
+                    .setConversationTitle(title) // Gives it a clean header look
+                    .addMessage(desc, System.currentTimeMillis(), sender)
+            )
+        } else {
+            // Fallback layout if no icon URL was provided
+            builder.setContentTitle(title)
+            builder.setContentText(desc)
+
+            if (style == "bigText") {
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(desc))
+            }
         }
 
         pendingIntent?.let { builder.setContentIntent(it) }
 
         when (actionType) {
-            "install" -> actionIntent?.let { builder.addAction(0, "Install Update", it) }
-            "uninstall" -> actionIntent?.let { builder.addAction(0, "Uninstall App", it) }
+            "install" -> actionIntent?.let { builder.addAction(0, "Install", it) }
+            "uninstall" -> actionIntent?.let { builder.addAction(0, "Uninstall", it) }
             "url" -> actionIntent?.let { builder.addAction(0, "Open Link", it) }
         }
 
