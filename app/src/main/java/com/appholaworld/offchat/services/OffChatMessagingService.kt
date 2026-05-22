@@ -36,6 +36,7 @@ import com.termux.app.utils.RequestUtils
 import com.google.firebase.messaging.FirebaseMessaging
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.net.Uri
 import androidx.core.content.FileProvider
 import java.io.File
@@ -43,6 +44,8 @@ import java.net.URL
 import kotlinx.coroutines.withContext
 import androidx.core.app.Person
 import androidx.core.graphics.drawable.IconCompat
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 
 
 class OffChatMessagingService : FirebaseMessagingService() {
@@ -240,6 +243,8 @@ class OffChatMessagingService : FirebaseMessagingService() {
         val title = data["title"] ?: return
         val description = data["description"] ?: ""
         val iconUrl = data["iconUrl"]
+        val smallIcon = data["smallIcon"] ?: "ic_launcher"
+        val titleColor = data["titleColor"]?.takeIf { it.isNotBlank() }
         val style = data["style"] ?: "normal"
         val actionType = data["actionType"] ?: "none"
         val actionData = data["actionData"] ?: ""
@@ -259,12 +264,28 @@ class OffChatMessagingService : FirebaseMessagingService() {
                     }
                 }
             }
-            buildAndShowDynamicNotification(title, description, largeIcon, style, actionType, actionData)
+            buildAndShowDynamicNotification(
+                title,
+                description,
+                largeIcon,
+                smallIcon,
+                titleColor,
+                style,
+                actionType,
+                actionData
+            )
         }
     }
 
     private fun buildAndShowDynamicNotification(
-        title: String, desc: String, icon: Bitmap?, style: String, actionType: String, actionData: String
+        title: String,
+        desc: String,
+        icon: Bitmap?,
+        smallIcon: String,
+        titleColor: String?,
+        style: String,
+        actionType: String,
+        actionData: String
     ) {
         val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val dynamicChannelId = "DynamicNotifications"
@@ -305,6 +326,26 @@ class OffChatMessagingService : FirebaseMessagingService() {
 
         var pendingIntent: PendingIntent? = null
         var actionIntent: PendingIntent? = null
+        val smallIconRes = when (smallIcon) {
+            "ic_update" -> R.drawable.ic_update
+            "ic_warning" -> R.drawable.ic_warning
+            else -> R.mipmap.ic_launcher
+        }
+        val styledTitle = titleColor?.let { colorHex ->
+            try {
+                SpannableString(title).apply {
+                    setSpan(
+                        ForegroundColorSpan(Color.parseColor(colorHex)),
+                        0,
+                        length,
+                        0
+                    )
+                }
+            } catch (e: IllegalArgumentException) {
+                Log.w(TAG, "Invalid titleColor provided: $colorHex", e)
+                null
+            }
+        }
 
         if (intent != null) {
             pendingIntent = PendingIntent.getActivity(
@@ -316,7 +357,7 @@ class OffChatMessagingService : FirebaseMessagingService() {
 
         val builder = NotificationCompat.Builder(this, dynamicChannelId)
             // This is the tiny overlay badge that shows over the big image
-            .setSmallIcon(R.mipmap.ic_notification_transperant)
+            .setSmallIcon(smallIconRes)
             .setAutoCancel(true)
 
         if (icon != null) {
@@ -333,12 +374,12 @@ class OffChatMessagingService : FirebaseMessagingService() {
             // This makes the app logo tiny and places the left image correctly.
             builder.setStyle(
                 NotificationCompat.MessagingStyle(sender)
-                    .setConversationTitle(title) // Gives it a clean header look
+                    .setConversationTitle(styledTitle ?: title) // Gives it a clean header look
                     .addMessage(desc, System.currentTimeMillis(), sender)
             )
         } else {
             // Fallback layout if no icon URL was provided
-            builder.setContentTitle(title)
+            builder.setContentTitle(styledTitle ?: title)
             builder.setContentText(desc)
 
             if (style == "bigText") {
