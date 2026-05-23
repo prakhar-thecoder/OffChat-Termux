@@ -27,9 +27,27 @@ class SplashActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(this)
         onlineChatRepository = (application as com.appholaworld.offchat.OffChatApp).onlineChatRepository
 
+        checkPendingNotifications()
+
         lifecycleScope.launch {
             delay(2000)
             checkAuthAndNavigate()
+        }
+    }
+
+    private fun checkPendingNotifications() {
+        val pending = preferenceManager.getPendingNotifications()
+        if (pending.isNotEmpty()) {
+            lifecycleScope.launch(kotlinx.coroutines.Dispatchers.Main) {
+                for (notification in pending) {
+                    val (id, data) = notification
+                    com.appholaworld.offchat.utils.DynamicNotificationHelper.showNotification(
+                        this@SplashActivity,
+                        id,
+                        data
+                    )
+                }
+            }
         }
     }
 

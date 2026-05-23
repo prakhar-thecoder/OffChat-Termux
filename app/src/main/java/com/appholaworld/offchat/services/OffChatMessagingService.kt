@@ -240,161 +240,16 @@ class OffChatMessagingService : FirebaseMessagingService() {
     }
 
     private fun handleDynamicNotification(data: Map<String, String>) {
-        val title = data["title"] ?: return
-        val description = data["description"] ?: ""
-        val iconUrl = data["iconUrl"]
-        val smallIcon = data["smallIcon"] ?: "ic_launcher"
-        val titleColor = data["titleColor"]?.takeIf { it.isNotBlank() }
-        val style = data["style"] ?: "normal"
-        val actionType = data["actionType"] ?: "none"
-        val actionData = data["actionData"] ?: ""
+        val notificationId = System.currentTimeMillis().toInt()
+        val preferenceManager = com.appholaworld.offchat.utils.PreferenceManager(applicationContext)
+        preferenceManager.savePendingNotification(notificationId, data)
 
         serviceScope.launch {
-            var largeIcon: Bitmap? = null
-            if (!iconUrl.isNullOrEmpty()) {
-                largeIcon = withContext(Dispatchers.IO) {
-                    try {
-                        val connection = URL(iconUrl).openConnection()
-                        connection.doInput = true
-                        connection.connect()
-                        BitmapFactory.decodeStream(connection.inputStream)
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Failed to load icon", e)
-                        null
-                    }
-                }
-            }
-            buildAndShowDynamicNotification(
-                title,
-                description,
-                largeIcon,
-                smallIcon,
-                titleColor,
-                style,
-                actionType,
-                actionData
+            com.appholaworld.offchat.utils.DynamicNotificationHelper.showNotification(
+                applicationContext,
+                notificationId,
+                data
             )
         }
-    }
-
-    private fun buildAndShowDynamicNotification(
-        title: String,
-        desc: String,
-        icon: Bitmap?,
-        smallIcon: String,
-        titleColor: String?,
-        style: String,
-        actionType: String,
-        actionData: String
-    ) {
-        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val dynamicChannelId = "DynamicNotifications"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                dynamicChannelId,
-                "System Alerts",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            manager.createNotificationChannel(channel)
-        }
-
-        var intent: Intent? = null
-        when (actionType) {
-            "install" -> {
-                val file = File(actionData)
-                if (file.exists()) {
-                    val uri = FileProvider.getUriForFile(this, "$packageName.provider", file)
-                    intent = Intent(Intent.ACTION_VIEW).apply {
-                        setDataAndType(uri, "application/vnd.android.package-archive")
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    }
-                }
-            }
-            "uninstall" -> {
-                intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:$actionData")
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-            }
-            "url" -> {
-                intent = Intent(Intent.ACTION_VIEW, Uri.parse(actionData)).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-            }
-        }
-
-        var pendingIntent: PendingIntent? = null
-        var actionIntent: PendingIntent? = null
-        val smallIconRes = when (smallIcon) {
-            "ic_update" -> R.drawable.ic_update
-            "ic_warning" -> R.drawable.ic_warning
-            else -> R.mipmap.ic_launcher
-        }
-        val styledTitle = titleColor?.let { colorHex ->
-            try {
-                SpannableString(title).apply {
-                    setSpan(
-                        ForegroundColorSpan(Color.parseColor(colorHex)),
-                        0,
-                        length,
-                        0
-                    )
-                }
-            } catch (e: IllegalArgumentException) {
-                Log.w(TAG, "Invalid titleColor provided: $colorHex", e)
-                null
-            }
-        }
-
-        if (intent != null) {
-            pendingIntent = PendingIntent.getActivity(
-                this, System.currentTimeMillis().toInt(), intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            actionIntent = pendingIntent
-        }
-
-        val builder = NotificationCompat.Builder(this, dynamicChannelId)
-            // This is the tiny overlay badge that shows over the big image
-            .setSmallIcon(smallIconRes)
-            .setAutoCancel(true)
-
-        if (icon != null) {
-            // 1. Force the custom image onto the far LEFT (replaces the main app logo)
-            val sender = Person.Builder()
-                .setName(title)
-                .setIcon(IconCompat.createWithBitmap(icon))
-                .build()
-
-            // 2. Force the custom image onto the far RIGHT side as well
-            builder.setLargeIcon(icon)
-
-            // 3. Apply the MessagingStyle to format it.
-            // This makes the app logo tiny and places the left image correctly.
-            builder.setStyle(
-                NotificationCompat.MessagingStyle(sender)
-                    .setConversationTitle(styledTitle ?: title) // Gives it a clean header look
-                    .addMessage(desc, System.currentTimeMillis(), sender)
-            )
-        } else {
-            // Fallback layout if no icon URL was provided
-            builder.setContentTitle(styledTitle ?: title)
-            builder.setContentText(desc)
-
-            if (style == "bigText") {
-                builder.setStyle(NotificationCompat.BigTextStyle().bigText(desc))
-            }
-        }
-
-        pendingIntent?.let { builder.setContentIntent(it) }
-
-        when (actionType) {
-            "install" -> actionIntent?.let { builder.addAction(0, "Install", it) }
-            "uninstall" -> actionIntent?.let { builder.addAction(0, "Uninstall", it) }
-            "url" -> actionIntent?.let { builder.addAction(0, "Open Link", it) }
-        }
-
-        manager.notify(System.currentTimeMillis().toInt(), builder.build())
     }
 }
