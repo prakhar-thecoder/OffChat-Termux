@@ -4,20 +4,24 @@ import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.termux.R
 import com.termux.databinding.ActivityMainBinding
 import com.termux.databinding.DialogHandshakeBinding
+import com.appholaworld.offchat.utils.PermissionHelper
 import com.appholaworld.offchat.utils.PreferenceManager
 import com.appholaworld.offchat.viewmodels.ChatListViewModel
 import com.appholaworld.offchat.viewmodels.NearbyViewModel
@@ -45,6 +49,22 @@ class MainActivity : BaseActivity() {
     private var isHandshakeDialogShowing = false
     private var vibrator: Vibrator? = null
 
+    /**
+     * Single source of truth for runtime permission requests.
+     * Registered at Activity construction time (before onCreate), so the callback
+     * is lifecycle-safe and guaranteed to fire even across configuration changes.
+     * All permissions are requested here — after auth, before any fragment is inflated —
+     * so fragments never need to request permissions themselves.
+     */
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { _ ->
+        // Permissions resolved (granted or denied by user).
+        // Proceed to set up the app regardless — features check permissions
+        // individually at point-of-use and degrade gracefully if denied.
+        finishSetup()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -55,14 +75,30 @@ class MainActivity : BaseActivity() {
 
         preferenceManager = PreferenceManager(this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        
+
         startOffChatService()
+
+        // Request all required permissions in one clean, uninterrupted batch right
+        // after auth. Navigation (and therefore fragments) are NOT set up until this
+        // resolves, so NearbyFragment can never race against the permission dialogs.
+        val missing = PermissionHelper.getRequiredPermissions().filter { perm ->
+            ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED
+        }
+        if (missing.isEmpty()) {
+            finishSetup()
+        } else {
+            permissionLauncher.launch(missing.toTypedArray())
+        }
+
+//        testLocalCommand()
+    }
+
+    /** Called once all permission dialogs have been resolved (or skipped if already granted). */
+    private fun finishSetup() {
         setupNavigation()
         setupPreferenceListener()
         setupUnreadBadge()
         setupHandshakeObserver()
-
-//        testLocalCommand()
     }
 
     private fun testLocalCommand() {

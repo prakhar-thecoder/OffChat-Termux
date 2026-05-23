@@ -47,9 +47,11 @@ class NearbyFragment : Fragment() {
         setupRecyclerView()
         setupObservers()
         setupUI()
-        
-        // Auto-start scan on startup
-        checkPermissionsAndStartScan()
+        // Permissions are requested by MainActivity before fragments are created.
+        // Auto-scan starts here only if they're already granted.
+        if (PermissionHelper.hasAllPermissions(requireContext())) {
+            viewModel.startScan()
+        }
     }
 
 
